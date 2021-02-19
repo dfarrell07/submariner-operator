@@ -399,7 +399,7 @@ func newSubmariner() *submariner_v1.Submariner {
 			CeIPSecNATTPort:          4500,
 			CeIPSecIKEPort:           500,
 			CeIPSecPSK:               "DJaA2kVW72w8kjQCEpzkDhwZuniDwgePKFE7FaxVNMWqbpmT2qvp68XW52MO70ho",
-			BrokerK8sRemoteNamespace: "submariner-broker",
+			BrokerK8sRemoteNamespace: "submariner-broker0",
 			BrokerK8sApiServer:       "https://192.168.99.110:8443",
 			BrokerK8sApiServerToken:  "MIIDADCCAeigAw",
 			BrokerK8sCA:              "client.crt",
