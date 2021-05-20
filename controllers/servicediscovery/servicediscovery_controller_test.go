@@ -223,7 +223,7 @@ func newServiceDiscovery() *submariner_v1.ServiceDiscovery {
 			GlobalnetEnabled:         false,
 			Repository:               "quay.io/submariner",
 			Version:                  "1.0.0",
-			BrokerK8sRemoteNamespace: "submariner-broker",
+			BrokerK8sRemoteNamespace: "submariner-broker0",
 			BrokerK8sApiServer:       "https://192.168.99.110:8443",
 			BrokerK8sApiServerToken:  "MIIDADCCAeigAw",
 			BrokerK8sCA:              "client.crt",

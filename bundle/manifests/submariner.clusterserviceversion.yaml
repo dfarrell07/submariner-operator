@@ -26,7 +26,7 @@ metadata:
             "brokerK8sApiServer": "192.168.67.110:8443",
             "brokerK8sApiServerToken": "$(SECRET_API_SERVER_TOKEN)",
             "brokerK8sCA": "$(SECRET_CA)",
-            "brokerK8sRemoteNamespace": "submariner-broker",
+            "brokerK8sRemoteNamespace": "submariner-broker0",
             "cableDriver": "libreswan",
             "ceIPSecDebug": false,
             "ceIPSecIKEPort": 500,
