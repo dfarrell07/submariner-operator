@@ -24,7 +24,7 @@ function create_subm_vars() {
     globalnet_deployment_name=submariner-globalnet
 
     declare_cidrs
-    natEnabled=false
+    natEnabled=true
 
     subm_gateway_image_repo="localhost:5000"
     subm_gateway_image_tag=local
