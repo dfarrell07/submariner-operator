@@ -28,7 +28,7 @@ require (
 	github.com/operator-framework/operator-lib v0.4.0
 	github.com/operator-framework/operator-sdk v0.19.0
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.11.0
+	github.com/prometheus/client_golang v1.13.0
 	github.com/spf13/cobra v1.3.0
 	github.com/submariner-io/admiral v0.12.0-m3
 	github.com/submariner-io/cloud-prepare v0.12.0-m3
@@ -39,8 +39,7 @@ require (
 	github.com/uw-labs/lichen v0.1.4
 	github.com/xlab/treeprint v1.1.0 // indirect
 	go.starlark.net v0.0.0-20210506034541-84642328b1f0 // indirect
-	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
-	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b // indirect
+	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
 	google.golang.org/api v0.65.0
 	gopkg.in/ini.v1 v1.66.2
 	k8s.io/api v0.21.0
