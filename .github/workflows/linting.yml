@@ -114,6 +114,22 @@ jobs:
       - name: Run packagedoc-lint
         run: make packagedoc-lint
 
+  variant-analysis:
+    name: Variant Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: go
+          debug: true
+      - name: Build code, creating CodeQL database
+        uses: github/codeql-action/autobuild@v2
+      - name: Run CodeQL variant analysis
+        uses: github/codeql-action/analyze@v2
+
   yaml-lint:
     name: YAML
     runs-on: ubuntu-latest
