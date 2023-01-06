@@ -18,7 +18,7 @@ jobs:
       security-events: write
     steps:
       - name: Check out the repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
       - name: Run Anchore vulnerability scanner
         uses: anchore/scan-action@ecfd0e98932e57ea8f68f29c4f418fc41a8194db
         id: scan
