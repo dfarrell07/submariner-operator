@@ -3,7 +3,7 @@ module github.com/submariner-io/submariner-operator
 go 1.18
 
 require (
-	github.com/coreos/go-semver v0.3.0
+	github.com/coreos/go-semver v0.3.1
 	github.com/go-logr/logr v1.2.3
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.20.0
