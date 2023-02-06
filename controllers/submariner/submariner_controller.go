@@ -115,9 +115,8 @@ func NewReconciler(config *Config) *Reconciler {
 // The Controller will requeue the Request to be processed again if the returned error is non-nil or
 // Result.Requeue is true, otherwise upon completion it will remove the work from the queue.
 
-// +kubebuilder:rbac:groups=submariner.io,resources=submariners,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=submariner.io,resources=submariners/status,verbs=get;update;patch
-//
+// +kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=submariners/status,verbs=update
+
 //nolint:gocyclo // Refactoring would yield functions with a lot of params which isn't ideal either.
 func (r *Reconciler) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
 	reqLogger := log.V(2).WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
@@ -260,6 +259,8 @@ func getImagePath(submariner *submopv1a1.Submariner, imageName, componentName st
 	return images.GetImagePath(submariner.Spec.Repository, submariner.Spec.Version, imageName, componentName,
 		submariner.Spec.ImageOverrides)
 }
+
+// +kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=submariners,verbs=get
 
 func (r *Reconciler) getSubmariner(ctx context.Context, key types.NamespacedName) (*submopv1a1.Submariner, error) {
 	instance := &submopv1a1.Submariner{}

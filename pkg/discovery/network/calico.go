@@ -28,6 +28,8 @@ import (
 	controllerClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=list
+
 //nolint:nilnil // Intentional as the purpose is to discover.
 func discoverCalicoNetwork(ctx context.Context, client controllerClient.Client) (*ClusterNetwork, error) {
 	cmList := &corev1.ConfigMapList{}

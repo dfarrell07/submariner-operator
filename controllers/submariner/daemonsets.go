@@ -101,6 +101,8 @@ func retrieveDaemonSetContainerStatuses(ctx context.Context, clnt client.Reader,
 	return &containerStatuses, nil
 }
 
+// +kubebuilder:rbac:groups="",namespace=submariner-operator,resources=pods,verbs=list
+
 func findPodsBySelector(ctx context.Context, clnt client.Reader, namespace string,
 	labelSelector *metav1.LabelSelector,
 ) ([]corev1.Pod, error) {

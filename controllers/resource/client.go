@@ -28,6 +28,9 @@ import (
 	controllerClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+// TODO dfarrell How are we supposed to know what type obj.(controllerClient.Object) is? Configmap is a placeholder
+// +kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=create;delete;get;update
+
 //nolint:wrapcheck // These functions are pass-through wrappers for the k8s APIs.
 func ForControllerClient(client controllerClient.Client, namespace string, objType controllerClient.Object) resource.Interface {
 	return &resource.InterfaceFuncs{

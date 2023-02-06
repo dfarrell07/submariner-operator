@@ -54,6 +54,9 @@ func FindPodCommandParameter(ctx context.Context, client controllerClient.Client
 	return "", nil
 }
 
+// TODO dfarrell controllerClient.InNamespace("") checks all namespaces, so is there a way to avoid ClusterRole?
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=pods,verbs=list
+
 //nolint:nilnil // Intentional as the purpose is to find.
 func FindPod(ctx context.Context, client controllerClient.Client, labelSelector string) (*corev1.Pod, error) {
 	selector, err := labels.Parse(labelSelector)

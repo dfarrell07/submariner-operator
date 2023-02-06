@@ -127,6 +127,8 @@ func networkPluginsDiscovery(ctx context.Context, client controllerClient.Client
 	return nil, nil
 }
 
+// +kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=submariners,verbs=get
+
 func getGlobalCIDRs(ctx context.Context, operatorClient controllerClient.Client, operatorNamespace string) (string, error) {
 	if operatorClient == nil {
 		return "", nil

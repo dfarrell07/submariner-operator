@@ -31,6 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
+// +kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=servicediscoveries,verbs=delete
+
 func (r *Reconciler) serviceDiscoveryReconciler(ctx context.Context, submariner *v1alpha1.Submariner, reqLogger logr.Logger,
 	isEnabled bool,
 ) error {

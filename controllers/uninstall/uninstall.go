@@ -148,6 +148,9 @@ func (i *Info) processComponents(ctx context.Context) (bool, error) {
 	return requeue, nil
 }
 
+// TODO dfarrell this seems to accept all objects, how to define RBAC?
+// +kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=deployments,verbs=delete
+
 func (i *Info) ensureDeleted(ctx context.Context, obj client.Object) error {
 	err := i.Client.Delete(ctx, obj)
 	if apierrors.IsNotFound(err) {
@@ -199,6 +202,8 @@ func (i *Info) createUninstallResource(ctx context.Context, c *Component) error 
 	return nil
 }
 
+// +kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=deployments,verbs=create
+
 func (i *Info) createUninstallDeploymentFrom(ctx context.Context, deployment *appsv1.Deployment) error {
 	i.convertPodSpecContainersToUninstall(&deployment.Spec.Template.Spec)
 
@@ -213,6 +218,8 @@ func (i *Info) createUninstallDeploymentFrom(ctx context.Context, deployment *ap
 
 	return nil
 }
+
+// +kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=daemonsets,verbs=create
 
 func (i *Info) createUninstallDaemonSetFrom(ctx context.Context, daemonSet *appsv1.DaemonSet) error {
 	i.convertPodSpecContainersToUninstall(&daemonSet.Spec.Template.Spec)
@@ -250,6 +257,8 @@ func (i *Info) ensureUninstallResourceComplete(ctx context.Context, c *Component
 	return requeue, nil
 }
 
+// +kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=daemonsets,verbs=get
+
 func (i *Info) ensureDaemonSetReady(ctx context.Context, key client.ObjectKey) (bool, error) {
 	daemonSet := &appsv1.DaemonSet{}
 
@@ -276,6 +285,8 @@ func (i *Info) ensureDaemonSetReady(ctx context.Context, key client.ObjectKey) (
 
 	return false, nil
 }
+
+// +kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=deployments,verbs=get
 
 func (i *Info) ensureDeploymentReady(ctx context.Context, key client.ObjectKey) (bool, error) {
 	deployment := &appsv1.Deployment{}
@@ -329,6 +340,8 @@ func (i *Info) convertPodSpecContainersToUninstall(podSpec *corev1.PodSpec) {
 		},
 	}
 }
+
+// +kubebuilder:rbac:groups="",namespace=submariner-operator,resources=pods,verbs=list
 
 func findPodsBySelector(ctx context.Context, clnt client.Reader, namespace string,
 	labelSelector *metav1.LabelSelector,

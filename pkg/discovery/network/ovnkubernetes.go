@@ -37,6 +37,10 @@ const (
 	OvnSBDBDefaultPort = 6642
 )
 
+// TODO dfarrell What namespace is ovnDBPod.Namespace, can we specify it to avoid a ClusterRole
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=get
+//+kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=services,verbs=get
+
 func discoverOvnKubernetesNetwork(ctx context.Context, client controllerClient.Client) (*ClusterNetwork, error) {
 	ovnDBPod, err := FindPod(ctx, client, "name=ovnkube-db")
 

@@ -291,6 +291,8 @@ func buildGatewayStatusAndUpdateMetrics(gateways []submarinerv1.Gateway) []subma
 	return gatewayStatuses
 }
 
+// +kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=gateways,verbs=list
+
 func (r *Reconciler) retrieveGateways(ctx context.Context, owner metav1.Object,
 	namespace string,
 ) ([]submarinerv1.Gateway, error) {

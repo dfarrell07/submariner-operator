@@ -95,6 +95,8 @@ func (u *updater) CreateOrUpdateFromEmbedded(ctx context.Context, crdYaml string
 	return result == util.OperationResultCreated, err
 }
 
+// +kubebuilder:rbac:groups=apiextensions.k8s.io,namespace=submariner-operator,resources=customresourcedefinitions,verbs=create
+
 func (c *controllerClientCreator) Create(ctx context.Context, crd *apiextensions.CustomResourceDefinition,
 	options metav1.CreateOptions, //nolint:gocritic // hugeParam - match K8s API
 ) (*apiextensions.CustomResourceDefinition, error) {
@@ -103,6 +105,8 @@ func (c *controllerClientCreator) Create(ctx context.Context, crd *apiextensions
 	return crd, err
 }
 
+// +kubebuilder:rbac:groups=apiextensions.k8s.io,namespace=submariner-operator,resources=customresourcedefinitions,verbs=update
+
 func (c *controllerClientCreator) Update(ctx context.Context, crd *apiextensions.CustomResourceDefinition,
 	options metav1.UpdateOptions, //nolint:gocritic // hugeParam - match K8s API
 ) (*apiextensions.CustomResourceDefinition, error) {
@@ -110,6 +114,8 @@ func (c *controllerClientCreator) Update(ctx context.Context, crd *apiextensions
 	err := c.client.Update(ctx, crd)
 	return crd, err
 }
+
+// +kubebuilder:rbac:groups=apiextensions.k8s.io,namespace=submariner-operator,resources=customresourcedefinitions,verbs=get
 
 func (c *controllerClientCreator) Get(ctx context.Context, name string,
 	options metav1.GetOptions,
@@ -123,6 +129,8 @@ func (c *controllerClientCreator) Get(ctx context.Context, name string,
 
 	return crd, nil
 }
+
+// +kubebuilder:rbac:groups=apiextensions.k8s.io,namespace=submariner-operator,resources=customresourcedefinitions,verbs=delete;get
 
 func (c *controllerClientCreator) Delete(ctx context.Context, name string,
 	options metav1.DeleteOptions, //nolint:gocritic // Match K8s API

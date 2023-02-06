@@ -31,6 +31,9 @@ import (
 	controllerClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=daemonsets,verbs=list
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=get
+
 //nolint:nilnil // Intentional as the purpose is to discover.
 func discoverFlannelNetwork(ctx context.Context, client controllerClient.Client) (*ClusterNetwork, error) {
 	daemonsets := &appsv1.DaemonSetList{}

@@ -20,6 +20,7 @@ ignore: |
   /config/crd/bases/submariner.io_servicediscoveries.yaml
   /config/manifests/kustomization.yaml
   /config/manifests/bases/submariner.clusterserviceversion.yaml
+  /config/rbac/submariner-operator/role.yaml
   /config/bundle/kustomization.yaml
   /bundle
   /packagemanifests

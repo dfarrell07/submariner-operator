@@ -40,9 +40,7 @@ type BrokerReconciler struct {
 	Config *rest.Config
 }
 
-//+kubebuilder:rbac:groups=submariner.io,resources=brokers,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=submariner.io,resources=brokers/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=submariner.io,resources=brokers/finalizers,verbs=update
+//+kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=brokers,verbs=get
 
 func (r *BrokerReconciler) Reconcile(ctx context.Context, request ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()

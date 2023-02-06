@@ -46,6 +46,8 @@ type clusterInfo struct {
 	GlobalCidr []string `json:"global_cidr"`
 }
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=create
+
 func CreateConfigMap(ctx context.Context, client controllerClient.Client, globalnetEnabled bool, defaultGlobalCidrRange string,
 	defaultGlobalClusterSize uint, namespace string,
 ) error {
@@ -101,6 +103,8 @@ func NewGlobalnetConfigMap(globalnetEnabled bool, defaultGlobalCidrRange string,
 	return cm, nil
 }
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=update
+
 func updateConfigMap(ctx context.Context, client controllerClient.Client, configMap *corev1.ConfigMap, newCluster clusterInfo,
 ) error {
 	var existingInfo []clusterInfo
@@ -134,11 +138,15 @@ func updateConfigMap(ctx context.Context, client controllerClient.Client, config
 	return errors.Wrapf(err, "error updating ConfigMap")
 }
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=get
+
 //nolint:wrapcheck // No need to wrap here
 func GetConfigMap(ctx context.Context, client controllerClient.Client, namespace string) (*corev1.ConfigMap, error) {
 	cm := &corev1.ConfigMap{}
 	return cm, client.Get(ctx, types.NamespacedName{Namespace: namespace, Name: globalCIDRConfigMapName}, cm)
 }
+
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=configmaps,verbs=delete
 
 //nolint:wrapcheck // No need to wrap here
 func DeleteConfigMap(ctx context.Context, client controllerClient.Client, namespace string) error {

@@ -94,6 +94,8 @@ func findClusterIPRangeFromApiserver(ctx context.Context, client controllerClien
 	return FindPodCommandParameter(ctx, client, "component=kube-apiserver", "--service-cluster-ip-range")
 }
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=services,verbs=create
+
 func findClusterIPRangeFromServiceCreation(ctx context.Context, client controllerClient.Client) (string, error) {
 	ns := os.Getenv("WATCH_NAMESPACE")
 	// WATCH_NAMESPACE env should be set to operator's namespace, if running in operator
@@ -178,6 +180,8 @@ func findPodIPRangeKubeController(ctx context.Context, client controllerClient.C
 func findPodIPRangeKubeProxy(ctx context.Context, client controllerClient.Client) (string, error) {
 	return FindPodCommandParameter(ctx, client, "component=kube-proxy", "--cluster-cidr")
 }
+
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=nodes,verbs=list
 
 func findPodIPRangeFromNodeSpec(ctx context.Context, client controllerClient.Client) (string, error) {
 	nodes := &corev1.NodeList{}

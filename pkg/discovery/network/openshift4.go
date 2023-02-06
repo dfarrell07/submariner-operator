@@ -32,6 +32,9 @@ import (
 	controllerClient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+// TODO dfarrell What namespaces does this Get use?
+//+kubebuilder:rbac:groups=config.openshift.io,namespace=submariner-operator,resources=networks,verbs=get
+
 //nolint:nilnil // Intentional as the purpose is to discover.
 func discoverOpenShift4Network(ctx context.Context, client controllerClient.Client) (*ClusterNetwork, error) {
 	network := &unstructured.Unstructured{}

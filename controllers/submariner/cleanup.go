@@ -110,6 +110,8 @@ func (r *Reconciler) removeFinalizer(ctx context.Context, instance *operatorv1al
 		instance, names.CleanupFinalizer)
 }
 
+// +kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=servicediscoveries,verbs=delete
+
 func (r *Reconciler) ensureServiceDiscoveryDeleted(ctx context.Context, namespace string) bool {
 	err := r.config.ScopedClient.Delete(ctx, newServiceDiscoveryCR(namespace))
 	if apierrors.IsNotFound(err) {

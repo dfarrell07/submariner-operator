@@ -84,9 +84,7 @@ type Reconciler struct {
 // blank assignment to verify that Reconciler implements reconcile.Reconciler.
 var _ reconcile.Reconciler = &Reconciler{}
 
-//+kubebuilder:rbac:groups=submariner.io,resources=servicediscoveries,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=submariner.io,resources=servicediscoveries/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=submariner.io,resources=servicediscoveries/finalizers,verbs=update
+//+kubebuilder:rbac:groups=apps,namespace=submariner-operator,resources=deployments,verbs=delete
 
 // Reconcile reads that state of the cluster for a ServiceDiscovery object and makes changes based on the state read
 // and what is in the ServiceDiscovery.Spec
@@ -165,6 +163,8 @@ func (r *Reconciler) Reconcile(ctx context.Context, request reconcile.Request) (
 
 	return reconcile.Result{}, err
 }
+
+//+kubebuilder:rbac:groups=submariner.io,namespace=submariner-operator,resources=servicediscoveries,verbs=get
 
 func (r *Reconciler) getServiceDiscovery(ctx context.Context, key types.NamespacedName) (*submarinerv1alpha1.ServiceDiscovery, error) {
 	instance := &submarinerv1alpha1.ServiceDiscovery{}
@@ -420,6 +420,8 @@ func getCustomCoreDNSNamespace(config *submarinerv1alpha1.CoreDNSCustomConfig) s
 	return defaultCoreDNSNamespace
 }
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=services,verbs=get
+
 func (r *Reconciler) updateDNSCustomConfigMap(ctx context.Context, cr *submarinerv1alpha1.ServiceDiscovery,
 	reqLogger logr.Logger,
 ) error {
@@ -457,6 +459,8 @@ func (r *Reconciler) updateDNSCustomConfigMap(ctx context.Context, cr *submarine
 
 	return errors.Wrap(err, "error updating DNS custom ConfigMap")
 }
+
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=services,verbs=get
 
 func (r *Reconciler) configureDNSConfigMap(ctx context.Context, cr *submarinerv1alpha1.ServiceDiscovery, configMapNamespace,
 	configMapName string,
@@ -541,6 +545,8 @@ func findCoreDNSListeningPort(coreFile string) string {
 	return coreDNSPort
 }
 
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=services,verbs=get
+
 func (r *Reconciler) configureOpenshiftClusterDNSOperator(ctx context.Context, instance *submarinerv1alpha1.ServiceDiscovery) error {
 	lighthouseDNSService := &corev1.Service{}
 
@@ -556,6 +562,8 @@ func (r *Reconciler) configureOpenshiftClusterDNSOperator(ctx context.Context, i
 
 	return r.updateLighthouseConfigInOpenshiftDNSOperator(ctx, instance, lighthouseDNSService.Spec.ClusterIP)
 }
+
+//+kubebuilder:rbac:groups="operator.openshift.io",namespace=submariner-operator,resources=dnses,verbs=get
 
 func (r *Reconciler) updateLighthouseConfigInOpenshiftDNSOperator(ctx context.Context, instance *submarinerv1alpha1.ServiceDiscovery,
 	clusterIP string,
@@ -719,6 +727,8 @@ func (r *Reconciler) ensureLighthouseCoreDNSDeployment(ctx context.Context, inst
 
 	return nil
 }
+
+//+kubebuilder:rbac:groups="",namespace=submariner-operator,resources=services,verbs=get
 
 func (r *Reconciler) ensureLighthouseCoreDNSService(ctx context.Context, instance *submarinerv1alpha1.ServiceDiscovery,
 	reqLogger logr.Logger,
