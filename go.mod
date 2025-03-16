@@ -7,7 +7,7 @@ require (
 	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.20.2
 	github.com/onsi/gomega v1.34.2
-	github.com/openshift/api v0.0.0-20230714214528-de6ad7979b00
+	github.com/openshift/api 8a7efbfb5316
 	github.com/operator-framework/operator-lib v0.15.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.76.2
