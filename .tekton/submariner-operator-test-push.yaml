@@ -25,6 +25,8 @@ spec:
     value: quay.io/redhat-user-workloads/dfarrell07-tenant/submariner-operator-test:{{revision}}
   - name: dockerfile
     value: package/Dockerfile.submariner-operator
+  - name: build-args-file
+    value: .tekton/konflux_devel.args
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
