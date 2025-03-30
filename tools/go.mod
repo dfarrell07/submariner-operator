@@ -149,7 +149,8 @@ require (
 	github.com/operator-framework/api v0.27.0 // indirect
 	github.com/operator-framework/operator-manifest-tools v0.8.0 // indirect
 	github.com/operator-framework/operator-registry v1.49.0 // indirect
-	github.com/otiai10/copy v1.14.0 // indirect
+	github.com/otiai10/copy v1.14.1 // indirect
+	github.com/otiai10/mint v1.6.3 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/peterbourgon/diskv v2.0.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
