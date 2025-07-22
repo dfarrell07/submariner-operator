@@ -28,7 +28,7 @@ spec:
   - name: image-expires-after
     value: 5d
   - name: dockerfile
-    value: bundle.Dockerfile
+    value: bundle.Dockerfile.konflux
   pipelineSpec:
     description: |
       This pipeline is ideal for building container images from a Containerfile while maintaining trust after pipeline customization.
@@ -198,6 +198,62 @@ spec:
         workspace: git-auth
       - name: netrc
         workspace: netrc
+    - name: generate-bundle
+      params:
+        - name: ociStorage
+          value: $(params.output-image).script
+        - name: ociArtifactExpiresAfter
+          value: $(params.image-expires-after)
+        - name: SCRIPT_RUNNER_IMAGE
+          value: quay.io/submariner/shipyard-dapper-base:devel
+        - name: SCRIPT
+          value: |
+            #!/bin/bash
+            set -ex
+
+            make bundle LOCAL_BUILD=1
+
+            STATIC_LABELS='
+            LABEL com.redhat.component="submariner-operator-bundle-container" \
+                  name="submariner-operator-bundle" \
+                  version="${BASE_BRANCH}" \
+                  release="${BASE_BRANCH}" \
+                  summary="Multicluster networking operator based on Submariner" \
+                  description="Submariner enables multicluster networking and service discovery across Kubernetes clusters, following Kubernetes KEP-1645." \
+                  url="https://github.com/submariner-io/submariner-operator" \
+                  distribution-scope="public" \
+                  com.github.url="https://github.com/submariner-io/submariner-operator" \
+                  com.redhat.delivery.operator.bundle=true \
+                  io.k8s.display-name="Submariner Operator" \
+                  io.k8s.description="Implements Kubernetes multicluster networking and service discovery (KEP-1645)" \
+                  io.openshift.expose-services="" \
+                  io.openshift.non-scalable="true" \
+                  io.openshift.tags="submariner,acm,networking,multicluster,rhel9" \
+                  io.openshift.wants="submariner-operator" \
+                  maintainer="['"'"'multi-cluster-networking@redhat.com'"'"']" \
+                  vendor="Red Hat, Inc."'
+
+            cp bundle.Dockerfile bundle.Dockerfile.konflux
+            echo "$STATIC_LABELS" >> bundle.Dockerfile.konflux
+
+            echo "--- Final bundle.Dockerfile.konflux ---"
+            cat bundle.Dockerfile.konflux
+            echo "--- End bundle.Dockerfile.konflux ---"
+        - name: HERMETIC
+          value: $(params.hermetic)
+        - name: SOURCE_ARTIFACT
+          value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
+      runAfter:
+      - prefetch-dependencies
+      taskRef:
+        params:
+        - name: name
+          value: run-script-oci-ta
+        - name: bundle
+          value: quay.io/konflux-ci/tekton-catalog/task-run-script-oci-ta:0.1@sha256:4b4012ad649a0354a7a355a9b26c0b53bea577801bcaf903dc5260321a9e3c3a
+        - name: kind
+          value: task
+        resolver: bundles
     - name: build-container
       params:
       - name: IMAGE
@@ -222,11 +278,14 @@ spec:
       - name: PRIVILEGED_NESTED
         value: $(params.privileged-nested)
       - name: SOURCE_ARTIFACT
-        value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
+        value: $(tasks.generate-bundle.results.SCRIPT_ARTIFACT)
+      - name: ADDITIONAL_BASE_IMAGES
+        value:
+          - $(tasks.generate-bundle.results.SCRIPT_RUNNER_IMAGE_REFERENCE)
       - name: CACHI2_ARTIFACT
         value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
       runAfter:
-      - prefetch-dependencies
+      - generate-bundle
       taskRef:
         params:
         - name: name
@@ -558,7 +617,7 @@ spec:
       - name: CONTEXT
         value: $(params.path-context)
       - name: SOURCE_ARTIFACT
-        value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
+        value: $(tasks.generate-bundle.results.SCRIPT_ARTIFACT)
       runAfter:
       - build-image-index
       taskRef:
