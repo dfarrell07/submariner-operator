@@ -183,13 +183,19 @@ is-semantic-version:
 	    $(error 'ERROR: VERSION "$(BUNDLE_VERSION)" does not match the format required by operator-sdk.')
     endif
 
-# Download kustomize locally if not already downloaded.
-# We clear GITHUB_TOKEN to ensure that the installation script won't try to use it (and fail)
-KUSTOMIZE_INSTALL_SCRIPT ?= "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"
-KUSTOMIZE_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} sigs.k8s.io/kustomize/kustomize/v5)
-$(KUSTOMIZE):
+# Create a vendor directory for the tools module using the prefetched cache.
+# The `-mod=readonly` flag is crucial to prevent network access.
+tools/vendor: tools/go.mod
+	$(GO) -C tools mod vendor -mod=readonly
+
+# Use -mod=readonly to prevent network access when getting tool versions.
+KUSTOMIZE_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} -mod=readonly sigs.k8s.io/kustomize/kustomize/v5)
+OPERATOR_SDK_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} -mod=readonly github.com/operator-framework/operator-sdk)
+
+# Build kustomize from the vendored tools module.
+$(KUSTOMIZE): tools/vendor
 	mkdir -p $(@D)
-	{ curl -s $(KUSTOMIZE_INSTALL_SCRIPT) | GITHUB_TOKEN= bash -s -- $(subst v,,$(KUSTOMIZE_VERSION)) $(@D); }
+	$(GO) -C tools build -mod=vendor -o $@ sigs.k8s.io/kustomize/kustomize/v5
 
 kustomize: $(KUSTOMIZE)
 
@@ -227,29 +233,11 @@ golangci-lint: $(EMBEDDED_YAMLS)
 
 unit: $(EMBEDDED_YAMLS)
 
-# Operator SDK
-# If necessary, the verification *keys* can be updated as follows:
-# * update scripts/operator-sdk-signing-key.asc, import the relevant key,
-#   and export it with
-#     gpg --armor --export-options export-minimal --export \
-#     ${fingerprint} >> scripts/operator-sdk-signing-key.asc
-#   (replacing ${fingerprint} with the full fingerprint);
-# * to update scripts/operator-sdk-signing-keyring.gpg, run
-#     gpg --no-options -q --batch --no-default-keyring \
-#     --output scripts/operator-sdk-signing-keyring.gpg \
-#     --dearmor scripts/operator-sdk-signing-key.asc
-OPERATOR_SDK_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} github.com/operator-framework/operator-sdk)
-$(OPERATOR_SDK):
-	mkdir -p $(@D) && \
-	cd $(@D) && \
-	curl -LO "https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}/operator-sdk_linux_amd64" \
-	      -O "https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}/checksums.txt.asc" \
-	      -O "https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}/checksums.txt" && \
-	sha256sum -c --ignore-missing --quiet checksums.txt
-	gpgv --keyring scripts/operator-sdk-signing-keyring.gpg bin/checksums.txt.asc bin/checksums.txt
-	mv bin/operator-sdk_linux_amd64 "$@"
-	chmod a+x $@
-	rm bin/checksums.txt*
+# Build operator-sdk from the vendored tools module.
+$(OPERATOR_SDK): tools/vendor
+	@echo "--- Building operator-sdk from vendored tools ---"
+	mkdir -p $(@D)
+	$(GO) -C tools build -mod=vendor -o $@ github.com/operator-framework/operator-sdk/cmd/operator-sdk
 
 operator-sdk: $(OPERATOR_SDK)
 
