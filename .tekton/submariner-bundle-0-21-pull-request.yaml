@@ -217,6 +217,10 @@ spec:
             #!/bin/bash
             set -ex
 
+            dnf install -y --disablerepo='*' gpgme-devel
+
+            export GOPROXY=off
+
             make bundle LOCAL_BUILD=1
 
             STATIC_LABELS='
