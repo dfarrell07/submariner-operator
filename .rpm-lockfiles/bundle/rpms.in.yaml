@@ -1,0 +1,12 @@
+---
+context:
+  containerfile: ../../package/Dockerfile.submariner-operator.konflux
+
+contentOrigin:
+  repofiles:
+    - submariner-rhel-9.repo
+packages:
+  - gpgme-devel
+arches:
+  - x86_64
+  - aarch64
