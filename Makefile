@@ -184,17 +184,17 @@ is-semantic-version:
     endif
 
 # Create a vendor directory for the tools module using the prefetched cache.
-# The `-mod=readonly` flag is crucial to prevent network access.
 tools/vendor: tools/go.mod
+	$(GO) -C tools mod vendor
 
-# Use -mod=readonly to prevent network access when getting tool versions.
-KUSTOMIZE_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} -mod=readonly sigs.k8s.io/kustomize/kustomize/v5)
-OPERATOR_SDK_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} -mod=readonly github.com/operator-framework/operator-sdk)
+# Use grep/awk to get tool versions from go.mod without network access.
+KUSTOMIZE_VERSION := $(shell grep 'sigs.k8s.io/kustomize/kustomize/v5' tools/go.mod | awk '{print $$2}')
+OPERATOR_SDK_VERSION := $(shell grep 'github.com/operator-framework/operator-sdk' tools/go.mod | awk '{print $$2}')
 
 # Build kustomize from the vendored tools module.
-$(KUSTOMIZE): tools/go.mod
+$(KUSTOMIZE): tools/vendor
 	mkdir -p $(@D)
-	$(GO) -C tools build -mod=readonly -o $@ sigs.k8s.io/kustomize/kustomize/v5
+	$(GO) -C tools build -mod=vendor -o $@ sigs.k8s.io/kustomize/kustomize/v5
 
 kustomize: $(KUSTOMIZE)
 
@@ -233,10 +233,10 @@ golangci-lint: $(EMBEDDED_YAMLS)
 unit: $(EMBEDDED_YAMLS)
 
 # Build operator-sdk from the vendored tools module.
-$(OPERATOR_SDK): tools/go.mod
+$(OPERATOR_SDK): tools/vendor
 	@echo "--- Building operator-sdk from vendored tools ---"
 	mkdir -p $(@D)
-	$(GO) -C tools build -mod=readonly -o $@ github.com/operator-framework/operator-sdk/cmd/operator-sdk
+	$(GO) -C tools build -mod=vendor -o $@ github.com/operator-framework/operator-sdk/cmd/operator-sdk
 
 operator-sdk: $(OPERATOR_SDK)
 
