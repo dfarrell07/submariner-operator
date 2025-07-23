@@ -217,7 +217,18 @@ spec:
             #!/bin/bash
             set -ex
 
-            dnf install -y --disablerepo='*' gpgme-devel
+            DNF_REPO_CONFIG='
+            [konflux-local-cache]
+            name=Konflux Local RPM Cache
+            baseurl=file:///var/workdir/cachi2/rpms/$(uname -m)
+            enabled=1
+            gpgcheck=0
+            '
+
+            echo "$DNF_REPO_CONFIG" > /etc/yum.repos.d/konflux-local.repo
+
+            dnf clean all
+            dnf install -y gpgme-devel
 
             export GOPROXY=off
 
