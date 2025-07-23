@@ -217,6 +217,10 @@ spec:
             #!/bin/bash
             set -ex
 
+            echo "--- Listing cachi2 directory contents ---"
+            ls -R /var/workdir/cachi2
+            echo "--- End cachi2 directory contents ---"
+
             RPM_CACHE_DIR="/var/workdir/cachi2/rpms/$(uname -m)"
 
             dnf install -y --disablerepo='*' ${RPM_CACHE_DIR}/createrepo_c*.rpm
