@@ -217,6 +217,12 @@ spec:
             #!/bin/bash
             set -ex
 
+            RPM_CACHE_DIR="/var/workdir/cachi2/rpms/$(uname -m)"
+
+            dnf install -y --disablerepo='*' ${RPM_CACHE_DIR}/createrepo_c*.rpm
+
+            createrepo_c "${RPM_CACHE_DIR}"
+
             DNF_REPO_CONFIG='
             [konflux-local-cache]
             name=Konflux Local RPM Cache

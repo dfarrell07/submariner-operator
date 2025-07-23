@@ -7,6 +7,7 @@ contentOrigin:
     - submariner-rhel-9.repo
 packages:
   - gpgme-devel
+  - createrepo_c
 arches:
   - x86_64
   - aarch64
