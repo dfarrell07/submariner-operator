@@ -186,7 +186,7 @@ is-semantic-version:
 # Create a vendor directory for the tools module using the prefetched cache.
 # The `-mod=readonly` flag is crucial to prevent network access.
 tools/vendor: tools/go.mod
-	$(GO) -C tools mod vendor -mod=readonly
+	$(GO) -C tools mod vendor
 
 # Use -mod=readonly to prevent network access when getting tool versions.
 KUSTOMIZE_VERSION := $(shell $(GO) -C tools list -m -f {{.Version}} -mod=readonly sigs.k8s.io/kustomize/kustomize/v5)
