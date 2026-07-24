@@ -18,3 +18,39 @@ ignore:
   - vulnerability: GHSA-pxq6-2prw-chj9
     package:
       name: github.com/docker/docker
+  # No fix available for containerd/containerd v1.7.33 (fix requires v2.x)
+  - vulnerability: GO-2026-5064
+    package:
+      name: github.com/containerd/containerd
+  # No fix available for containerd/containerd v1.7.33 (fix requires v2.x)
+  - vulnerability: GO-2026-5338
+    package:
+      name: github.com/containerd/containerd
+  # No fix available for containerd/containerd v1.7.33 (fix requires v2.x)
+  - vulnerability: GO-2026-5622
+    package:
+      name: github.com/containerd/containerd
+  # No fix available for docker/docker v28.5.2
+  - vulnerability: GHSA-x86f-5xw2-fm2r
+    fix-state: not-fixed
+    package:
+      name: github.com/docker/docker
+  # No fix available for docker/docker v28.5.2
+  - vulnerability: GHSA-rg2x-37c3-w2rh
+    fix-state: not-fixed
+    package:
+      name: github.com/docker/docker
+  # No fix available for docker/docker v28.5.2
+  - vulnerability: GHSA-vp62-88p7-qqf5
+    fix-state: not-fixed
+    package:
+      name: github.com/docker/docker
+  # No fix available for oras.land/oras-go/v2 v2.6.1
+  - vulnerability: GHSA-fxhp-mv3v-67qp
+    fix-state: not-fixed
+    package:
+      name: oras.land/oras-go/v2
+  # No fix available for golang.org/x/crypto v0.53.0
+  - vulnerability: GO-2026-5932
+    package:
+      name: golang.org/x/crypto
